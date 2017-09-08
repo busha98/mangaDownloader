@@ -1,7 +1,7 @@
-var request = require('request')
-var HTMLParser = require('fast-html-parser')
+const request = require('request')
+const HTMLParser = require('fast-html-parser')
 
-var getPicturesURL = async function (url) {
+async function getPicturesURL (url) {
   let body = await getBodyRequest(url)
   let arrayURL = await parseBodyForPictures(body)
   console.log(`в главе ${arrayURL.length} изображений`)
@@ -31,7 +31,7 @@ let getBodyRequest = (url) => {
     })
   })
 }
-var parseBodyForPictures = async function (body) {
+async function parseBodyForPictures (body) {
   let result
   let reg = /rm_h.init.+\);/ig
   result = reg.exec(body)[0]
