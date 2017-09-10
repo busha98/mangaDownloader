@@ -1,8 +1,8 @@
-var request = require('request')
-var fs = require('fs')
-var { getPicturesURL } = require('./parser')
+const request = require('request')
+const { getPicturesURL } = require('./parser')
+const fs = require('fs')
 
-var downloadManga = async function (picturesURLs, folderName, index, episodes, url) {
+async function downloadManga (picturesURLs, folderName, index, episodes, url) {
   download(picturesURLs[index], `./${folderName}/${getNamePage(index)}.jpg`, async function () {
     if (index + 1 < picturesURLs.length) {
       downloadManga(picturesURLs, folderName, ++index, episodes, url)
@@ -10,12 +10,13 @@ var downloadManga = async function (picturesURLs, folderName, index, episodes, u
       let episode = episodes.pop()
       fs.mkdirSync(`${episode[1]}`)
       let picturesURLs = await getPicturesURL('http://' + url + `/vol${episode[0]}/${episode[1]}?mtr=1`)
+      console.log(`episode ${episode[0]}`)
       downloadManga(picturesURLs, episode[1], 0, episodes, url)
     }
   })
 }
 
-var download = function (url, filename, callback) {
+function download (url, filename, callback) {
   request.head(url, function (err, res, body) {
     request(url).pipe(fs.createWriteStream(filename)).on('close', callback)
   })

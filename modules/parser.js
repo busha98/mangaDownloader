@@ -1,7 +1,7 @@
-var request = require('request')
-var HTMLParser = require('fast-html-parser')
+const request = require('request')
+const HTMLParser = require('fast-html-parser')
 
-var getPicturesURL = async function (url) {
+async function getPicturesURL (url) {
   let body = await getBodyRequest(url)
   let arrayURL = await parseBodyForPictures(body)
   console.log(`в главе ${arrayURL.length} изображений`)
@@ -13,14 +13,23 @@ async function getEpisodes (url) {
   let epi = root.querySelectorAll('title')
   let episodes = []
   let re = /\d+ - \d+/
+  /*
   for (let i in epi) {
     let result = re.exec(epi[i].childNodes[0].rawText)
     if (result) {
       episodes.push(result[0].split(/ - /))
     }
   }
+  */  
+  epi.forEach(function (element) {
+    let result = re.exec(element.childNodes[0].rawText)
+    if (result) {
+      episodes.push(result[0].split(/ - /))
+    }
+  }, this)
   return episodes
 }
+
 let getBodyRequest = (url) => {
   return new Promise(function (resolve, reject) {
     request(url, function (error, response, body) {
@@ -31,7 +40,7 @@ let getBodyRequest = (url) => {
     })
   })
 }
-var parseBodyForPictures = async function (body) {
+async function parseBodyForPictures (body) {
   let result
   let reg = /rm_h.init.+\);/ig
   result = reg.exec(body)[0]
