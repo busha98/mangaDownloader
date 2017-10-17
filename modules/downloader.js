@@ -10,7 +10,7 @@ async function downloadManga (picturesURLs, folderName, index, episodes, url) {
       let episode = episodes.pop()
       fs.mkdirSync(`${episode[1]}`)
       let picturesURLs = await getPicturesURL('http://' + url + `/vol${episode[0]}/${episode[1]}?mtr=1`)
-      console.log(`episode ${episode[0]}`)
+      console.log(`episode ${episode[1]}`)
       downloadManga(picturesURLs, episode[1], 0, episodes, url)
     }
   })
